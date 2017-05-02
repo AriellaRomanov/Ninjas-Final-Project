@@ -36,7 +36,7 @@ template <typename T>
 void DenseMatrix<T>::SetTolerance(const T tol)
 {
   if (tol < 0)
-    throw RangeErr<T>(tol);
+    throw TolErr("void DenseMatrix<T>::SetTolerance");
   m_zero = tol;
   for (long i = 0; i < m_size; i++)
     m_data[i].SetTolerance(m_zero);
@@ -90,9 +90,9 @@ template <typename T>
 T DenseMatrix<T>::operator()(const long row, const long col) const
 {
   if (row < 0 || row >= m_size)
-    throw SubscriptErr(row);
+    throw SubscriptErr(row, "T DenseMatrix<T>::operator()");
   if (col < 0 || col >= m_size)
-    throw SubscriptErr(col);
+    throw SubscriptErr(col, "T DenseMatrix<T>::operator()");
 
   return m_data[row][col];
 }
@@ -101,9 +101,9 @@ template <typename T>
 Matrix<T>& DenseMatrix<T>::operator()(const long row, const long col, const T val)
 {
   if (row < 0 || row >= m_size)
-    throw SubscriptErr(row);
+    throw SubscriptErr(row, "Matrix<T>& DenseMatrix<T>::operator()");
   if (col < 0 || col >= m_size)
-    throw SubscriptErr(col);
+    throw SubscriptErr(col, "Matrix<T>& DenseMatrix<T>::operator()");
   
   m_data[row][col] = val;
   return *this;

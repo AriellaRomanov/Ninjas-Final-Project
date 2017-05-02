@@ -32,7 +32,7 @@ template <typename T>
 void Vector<T>::SetTolerance(const T tol)
 {
   if (tol < 0)
-    throw RangeErr<T>(tol);
+    throw TolErr("void Vector<T>::SetTolerance");
   zero_tol = tol;
   return;
 }

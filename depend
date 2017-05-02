@@ -1,0 +1,2 @@
+main.o: main.cpp DenseMatrix.h Matrix.h Vector.h Exceptions.h \
+  Exceptions.hpp Vector.hpp DenseMatrix.hpp

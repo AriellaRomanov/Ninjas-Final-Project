@@ -166,5 +166,3 @@ class Matrix
       return is;
     }
 };
-
-//#include "Matrix.hpp"
