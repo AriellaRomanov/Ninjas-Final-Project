@@ -1,3 +1,5 @@
+#include "Exceptions.h"
+
 TolErr::TolErr(const string w)
 : where(w)
 {}

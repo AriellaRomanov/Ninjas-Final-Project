@@ -123,5 +123,3 @@ class SizeErr : public Error
     long m_b;
     string where;
 };
-
-#include "Exceptions.hpp"
