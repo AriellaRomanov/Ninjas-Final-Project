@@ -3,7 +3,7 @@
 using Type = double;
 
 template <typename T, T T_funct(T)>
-T evaluate(T operand)
+T evaluate(T operand) 
 {
   return T_funct(operand);
 }
