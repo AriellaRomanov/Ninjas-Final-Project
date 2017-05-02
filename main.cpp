@@ -33,7 +33,7 @@ int main()
     for(int i=0;i<SIZE-1;i++)
       b_vector[((i+1)*(SIZE-1))-1] += (evaluate<Type,y1>(static_cast<double>((i+1))/(SIZE)))/4;
     
-    cout<<b_vector<<endl;
+    //cout<<b_vector<<endl;
   
   }
   catch (Error& err)

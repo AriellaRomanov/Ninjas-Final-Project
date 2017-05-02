@@ -1,3 +1,3 @@
 Exceptions.o: Exceptions.cpp Exceptions.h
 main.o: main.cpp DenseMatrix.h Matrix.h Vector.h Exceptions.h Vector.hpp \
-  DenseMatrix.hpp PDEMatrix.h PDEMatrix.hpp
+ DenseMatrix.hpp PDEMatrix.h PDEMatrix.hpp
