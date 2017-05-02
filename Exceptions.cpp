@@ -5,7 +5,7 @@ TolErr::TolErr(const string w)
 {}
 
 TolErr::~TolErr()
-{};
+{}
 
 string TolErr::what() const
 {
@@ -29,7 +29,7 @@ DiagDomErr::DiagDomErr(const string w)
 {}
 
 DiagDomErr::~DiagDomErr()
-{};
+{}
 
 string DiagDomErr::what() const
 {
@@ -41,7 +41,7 @@ SubscriptErr::SubscriptErr(const long i, const string w)
 {}
 
 SubscriptErr::~SubscriptErr()
-{};
+{}
 
 string SubscriptErr::what() const
 {
@@ -54,7 +54,7 @@ DivByZeroErr::DivByZeroErr(const string w)
 {}
 
 DivByZeroErr::~DivByZeroErr()
-{};
+{}
 
 string DivByZeroErr::what() const
 {
@@ -66,7 +66,7 @@ SizeErr::SizeErr(const long a, const long b, const string w)
 {}
 
 SizeErr::~SizeErr()
-{};
+{}
 
 string SizeErr::what() const
 {
