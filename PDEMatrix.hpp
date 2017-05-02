@@ -69,42 +69,42 @@ T PDEMatrix<T>::operator()(const long row, const long col) const
   if (row == col)
     return 1;
 
+  //calculate lower off diagonal
   if (row == col + 1)
+  {
     if (row % (m_N - 1) == 0)
       return 0;
     else
       return -0.25;
+  }
 
-  if (col == row + 1) // off diagonals
+  //calculate upper off diagonal
+  if (col == row + 1)
+  {
     if (col % (m_N - 1) == 0)
       return 0;
     else
       return -0.25;
+  }
 
-  if (row == col + m_N - 1 || col == row + m_N - 1) // further diagonals
-    return -0.25; // done
+  //further diagonals
+  if (row == col + m_N - 1 || col == row + m_N - 1)
+    return -0.25;
+  
+  //everything else
   return 0;
 }
 
 template <typename T>
-Matrix<T>& PDEMatrix<T>::operator()(const long row, const long col, const T val)
+Matrix<T>& PDEMatrix<T>::operator()(const long row __attribute__((unused)), const long col __attribute__((unused)), const T val __attribute__((unused)))
 {
-  if (row < 0 || row >= m_size)
-    throw SubscriptErr(row, "Matrix<T>& PDEMatrix<T>::operator()");
-  if (col < 0 || col >= m_size)
-    throw SubscriptErr(col, "Matrix<T>& PDEMatrix<T>::operator()");
-
-  return *this;
+  throw PDEErr("Matrix<T>& PDEMatrix<T>::operator()");
 }
 
 template <typename T>
-unique_ptr<Matrix<T>> PDEMatrix<T>::operator*(const T rhs) const
+unique_ptr<Matrix<T>> PDEMatrix<T>::operator*(const T rhs __attribute__((unused))) const
 {
-  unique_ptr<Matrix<T>> m(new PDEMatrix<T>(*this));
-  for (long i = 0; i < m_size; i++)
-    for (long j = 0; j < m_size; j++)
-      (*m)(i, j, (*m)(i, j) * rhs);
-  return m;
+  throw PDEErr("unique_ptr<Matrix<T>> PDEMatrix<T>::operator*");
 }
 
 template <typename T>
@@ -115,53 +115,28 @@ Vector<T> PDEMatrix<T>::operator*(const Vector<T>& rhs) const
   {
     T sum = 0;
     for (long j = 0; j < m_size; j++)
-    {
       sum += ((*this)(i, j) * rhs[j]);
-    }
     vect[i] = sum;
   }
   return vect;
 }
 
 template <typename T>
-unique_ptr<Matrix<T>> PDEMatrix<T>::operator*(const Matrix<T>& rhs) const
+unique_ptr<Matrix<T>> PDEMatrix<T>::operator*(const Matrix<T>& rhs __attribute__((unused))) const
 {
-  unique_ptr<Matrix<T>> m(new PDEMatrix<T>(*this));
-  for (long i = 0; i < m_size; i++)
-  {
-    for (long j = 0; j < m_size; j++)
-    {
-      T sum = 0;
-      for (long k = 0; k < m_size; k++)
-      {
-        sum += ((*this)(i, k) * rhs(k, j));
-      }
-      (*m)(i, j, sum);
-    }
-  }
-  return m;
+  throw PDEErr("unique_ptr<Matrix<T>> PDEMatrix<T>::operator*");
 }
 
 template <typename T>
-unique_ptr<Matrix<T>> PDEMatrix<T>::operator+(const T rhs) const
+unique_ptr<Matrix<T>> PDEMatrix<T>::operator+(const T rhs __attribute__((unused))) const
 {
-  //PDEMatrix<T> * m = new PDEMatrix<T>(*this);
-  unique_ptr<Matrix<T>> m(new PDEMatrix<T>(*this));
-  for (long i = 0; i < m_size; i++)
-    for (long j = 0; j < m_size; j++)
-      (*m)(i, j, (*m)(i, j) + rhs);
-  return m;
+  throw PDEErr("unique_ptr<Matrix<T>> PDEMatrix<T>::operator+");
 }
 
 template <typename T>
-unique_ptr<Matrix<T>> PDEMatrix<T>::operator+(const Matrix<T>& rhs) const
+unique_ptr<Matrix<T>> PDEMatrix<T>::operator+(const Matrix<T>& rhs __attribute__((unused))) const
 {
-  //PDEMatrix<T> * m = new PDEMatrix<T>(*this);
-  unique_ptr<Matrix<T>> m(new PDEMatrix<T>(*this));
-  for (long i = 0; i < m_size; i++)
-    for (long j = 0; j < m_size; j++)
-      (*m)(i, j, (*m)(i, j) + rhs(i, j));
-  return m;
+  throw PDEErr("unique_ptr<Matrix<T>> PDEMatrix<T>::operator+");
 }
 
 template <typename T>
@@ -209,23 +184,16 @@ Matrix<T>& PDEMatrix<T>::operator-=(const Matrix<T>& rhs)
 }
 
 template <typename T>
-Matrix<T>& PDEMatrix<T>::operator=(const Matrix<T>& rhs)
+Matrix<T>& PDEMatrix<T>::operator=(const Matrix<T>& rhs __attribute__((unused)))
 {
-  m_size = rhs.GetSize();
-  m_zero = rhs.GetTolerance();
-  for (long i = 0; i < m_size; i++)
-    for (long j = 0; j < m_size; j++)
-      (*this)(i, j, rhs(i, j));
-  return *this;
+  throw PDEErr("Matrix<T>& PDEMatrix<T>::operator=");
 }
 
 template <typename T>
 PDEMatrix<T>& PDEMatrix<T>::operator=(const PDEMatrix<T>& rhs)
 {
+  m_N = rhs.GetN();
   m_size = rhs.GetSize();
   m_zero = rhs.GetTolerance();
-  for (long i = 0; i < m_size; i++)
-    for (long j = 0; j < m_size; j++)
-      (*this)(i, j, rhs(i, j));
   return *this;
 }

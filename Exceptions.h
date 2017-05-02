@@ -34,6 +34,28 @@ class TolErr : public Error
     string where;
 };
 
+class PDEErr : public Error
+{
+  public:
+    // Desc: default constructor for the PDEErr class
+    // Pre: None
+    // Post: an instance of the PDEErr class
+    // will be created
+    PDEErr(const string w = "");
+
+    // Desc: Default destructor
+    // Pre: None
+    // Post: The error will be deleted
+    ~PDEErr();
+
+    // Desc: returns a string description of the error
+    // Pre: None
+    // Post: returns a string description of the error
+    virtual string what() const;
+  private:
+    string where;
+};
+
 class DiagDomErr : public Error
 {
   public:

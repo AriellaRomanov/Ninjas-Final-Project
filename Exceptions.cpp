@@ -11,7 +11,19 @@ string TolErr::what() const
 {
   return "Cannot set a negative tolerance at " + where;
 }
-    
+
+PDEErr::PDEErr(const string w)
+: where(w)
+{}
+
+PDEErr::~PDEErr()
+{}
+
+string PDEErr::what() const
+{
+  return "Cannot modify a PDE matrix at " + where;
+}
+
 DiagDomErr::DiagDomErr(const string w)
 : where(w)
 {}
