@@ -136,6 +136,8 @@ class PDEMatrix : virtual public Matrix<T>
     // Pre: The rhs parameter must be of same size as object
     // Post: The matrix will take on the values of the rhs parameter
     virtual PDEMatrix<T>& operator=(const PDEMatrix<T>& rhs);
+    
+    Vector<T> Jacob_Mult(Vector<T>& x);
 
   private:
     // the granularity of the mesh

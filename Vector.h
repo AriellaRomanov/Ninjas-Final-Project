@@ -15,7 +15,7 @@ class Vector
     // Desc: default constructor, with the passed in dimension (default 1)
     // Pre: None
     // Post: an instantiated instance of the Vector class in R^1, or R^n if
-    // size is passed in
+    // size is passed in, with values defaulted to 1;
     Vector(const long size = 1);
     // Desc: copy constructor
     // Pre: copy is a valid Vector

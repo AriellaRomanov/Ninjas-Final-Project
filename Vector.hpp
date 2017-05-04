@@ -1,7 +1,12 @@
 template <typename T>
 Vector<T>::Vector(const long size)
 : m_size(size), m_data(new T[size]), zero_tol(0)
-{}
+{
+  for(long i=0;i<size;i++)
+  {
+    m_data[i] = 1;
+  }
+}
 
 template <typename T>
 Vector<T>::Vector(const Vector<T>& copy)

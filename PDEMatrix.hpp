@@ -189,11 +189,33 @@ Matrix<T>& PDEMatrix<T>::operator=(const Matrix<T>& rhs __attribute__((unused)))
   throw PDEErr("Matrix<T>& PDEMatrix<T>::operator=");
 }
 
-template <typename T>
+template <typename T> 
 PDEMatrix<T>& PDEMatrix<T>::operator=(const PDEMatrix<T>& rhs)
 {
   m_N = rhs.GetN();
   m_size = rhs.GetSize();
   m_zero = rhs.GetTolerance();
   return *this;
+}
+
+Vector<T> PDEMatrix<T>::Jacob_Mult(Vector<T>& x) const
+{
+  Vector<T> vect = Vector<T>(m_size);
+  for (long i = 0; i < m_size; i++)
+  {
+    T sum = 0;
+    //sum += ((*this)(i, i) * rhs[i]);
+    //Jacobi Mult Only uses the remainder matrix
+    //(i,i) is effectively 0 for this multiplication
+    if(i+1 < m_size)
+      sum += ((*this)(i, i+1) * rhs[i+1]);
+    if(i-1>=0)
+      sum += ((*this)(i, i-1) * rhs[i-1]);
+    if(i-(m_n-1)>=0)
+      sum += ((*this)(i, i-(m_n-1) * rhs[i-(m_n-1)]);
+    if(i+(m_n-1)<m_size)
+      sum += ((*this)(i, i+(m_n-1) * rhs[i+(m_n-1)]);
+    vect[i] = sum;
+  }
+  return vect;
 }
