@@ -16,36 +16,94 @@ Type f_y1(Type a __attribute__((unused))){return 1.0;}
 Type f_g(Type y){return y;}
 
 
-int main()
-{
+int main(int argc, char * argv[])
+{  
+  if (argc < 3)
+  {
+    cout << "Program usage: " << argv[0] << " <N> <zero tolerance> <output file (optional)>" << endl;
+    return 1;
+  }
+
   try
   {
-    long size = 10;
-    long iteration_max = 1000000;
-    
+    long N = atoi(argv[1]);
+    if (N < 1)
+      throw SizeErr(N, 1, "Expected min N of 1");
+    Type tol = atof(argv[2]);
+    if (tol < 0)
+      throw TolErr("program input");
+  
     PDESolution<Type> X(f_x0, f_x1, f_y0, f_y1, f_g);
-    int timeStart = time(NULL);
-    cout << X.Jacobi(iteration_max, size) << endl;
-    cout<<time(NULL)-timeStart<<endl;
-    
+    long timeStart = time(NULL);
+    Vector<Type> jvect(X.Jacobi(N, tol));
+    long jDiff = time(NULL) - timeStart;
+
     timeStart = time(NULL);
-    cout << X.Gaussian(size) << endl;
-    cout<<time(NULL)-timeStart<<endl;
+    Vector<Type> gvect(X.Gaussian(N, tol));
+    long gDiff = time(NULL) - timeStart;
     
-    /* const long SIZE = 4;
-    Vector<Type> b_vector((SIZE-1)*(SIZE-1));
-    for(int i=0;i<(SIZE-1)*(SIZE-1);i++)
-      b_vector[i] = 0;
-    for(int i=0;i<SIZE-1;i++)
-      b_vector[i] += (evaluate<Type,x0>(static_cast<double>((i+1))/(SIZE)))/4;
-    for(int i=0;i<SIZE-1;i++)
-      b_vector[i*(SIZE-1)] += (evaluate<Type,y0>(static_cast<double>((i+1))/(SIZE)))/4;
-    for(int i=0;i<SIZE-1;i++)
-      b_vector[(((SIZE-1)*(SIZE-1))-(SIZE-1))+i] += (evaluate<Type,x1>(static_cast<double>((i+1))/(SIZE)))/4;
-    for(int i=0;i<SIZE-1;i++)
-      b_vector[((i+1)*(SIZE-1))-1] += (evaluate<Type,y1>(static_cast<double>((i+1))/(SIZE)))/4;
-    
-    cout<<b_vector<<endl; */
+    if (argc >= 4)
+    {
+      Vector<Type> x(jvect.GetSize());
+      Vector<Type> y(jvect.GetSize());
+      for (long i = 0; i < N - 1; i++)
+        for (long j = 0; j < N - 1; j++)
+        {
+          x[i * (N - 1) + j] = (j + 1) / static_cast<Type>(N);
+          y[i * (N - 1) + j] = (i + 1) / static_cast<Type>(N);
+        }
+
+      //file
+      ofstream file;
+      file.open(argv[3]);
+      if (file.is_open())
+      {
+        //file << "Jacobi (" << jDiff << " seconds):" << endl;
+        
+        file << x << endl;
+        file << y << endl;
+        file << jvect << endl << endl;
+
+        //for (long i = 0; i < (N - 1) * (N - 1); i++)
+          //file << x[i] << " " << y[i] << " " << jvect[i] << endl;
+
+        // file << "ListPointPlot3D[{";
+        // for (long i = 0; i < (N - 1) * (N - 1); i++)
+        // {
+        //   file << "{" << x[i] << "," << y[i] << "," << jvect[i] << "}";
+        //   if (i < (N - 1) * (N - 1) - 1)
+        //     file << ",";
+        // }
+        // file << "}]" << endl;
+
+        //file << "Gaussian (" << gDiff << " seconds):" << endl;
+
+        file << gvect << endl;
+
+        //for (long i = 0; i < (N - 1) * (N - 1); i++)
+          //file << x[i] << " " << y[i] << " " << gvect[i] << endl;
+
+        // file << "ListPointPlot3D[{";
+        // for (long i = 0; i < (N - 1) * (N - 1); i++)
+        // {
+        //   file << "{" << x[i] << "," << y[i] << "," << gvect[i] << "}";
+        //   if (i < (N - 1) * (N - 1) - 1)
+        //     file << ",";
+        // }
+        // file << "}]" << endl;
+        
+        file.close();
+      }
+      else
+        cout << "Could not open file " << argv[3] << endl;
+    }
+    else
+    {
+      cout << "Jacobi (" << jDiff << " seconds):" << endl;
+      cout << jvect << endl;
+      cout << "Gaussian (" << gDiff << " seconds):" << endl;
+      cout << gvect << endl;
+    }
   
   }
   catch (Error& err)

@@ -1,0 +1,8 @@
+M = dlmread('out.dat')
+x = M(1,:)
+y = M(2,:)
+jz = M(3,:)
+gz = M(4,:)
+scatter3(x,y,jz)
+figure()
+scatter3(x,y,gz)

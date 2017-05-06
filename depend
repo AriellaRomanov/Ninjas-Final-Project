@@ -1,3 +1,4 @@
 Exceptions.o: Exceptions.cpp Exceptions.h
 main.o: main.cpp DenseMatrix.h Matrix.h Vector.h Exceptions.h Vector.hpp \
- DenseMatrix.hpp PDEMatrix.h PDEMatrix.hpp PDE.h PDE.hpp
+  DenseMatrix.hpp PDEMatrix.h PDEMatrix.hpp PDE.h Jacobi.h VNorm1.h \
+  VNorm1.hpp Jacobi.hpp Gaussian.h Gaussian.hpp PDE.hpp

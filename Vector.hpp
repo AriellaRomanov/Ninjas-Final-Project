@@ -1,12 +1,7 @@
 template <typename T>
 Vector<T>::Vector(const long size)
 : m_size(size), m_data(new T[size]), zero_tol(0)
-{
-  for(long i=0;i<size;i++)
-  {
-    m_data[i] = 1;
-  }
-}
+{}
 
 template <typename T>
 Vector<T>::Vector(const Vector<T>& copy)
@@ -244,7 +239,7 @@ Vector<T>& Vector<T>::operator-=(const Vector<T>& v)
 {
   // check for errors
   if (m_size != v.m_size)
-    throw SizeErr(m_size, v.m_size);
+    throw SizeErr(m_size, v.m_size, "Vector<T>& Vector<T>::operator-=");
   // iterate through the Vector
   // subtract each corresponding element in v
   // from the calling Vector element
@@ -254,14 +249,13 @@ Vector<T>& Vector<T>::operator-=(const Vector<T>& v)
 }
 
 template <typename T>
-bool Vector<T>::operator<(const Vector<T>& rhs)
+bool Vector<T>::operator<(const Vector<T>& rhs) const
 {
   if(m_size != rhs.m_size)
-        throw SizeErr(m_size, rhs.m_size);
-      for(long i=0;i<m_size;i++)
-      {
-        if(m_data[i] >= rhs[i])
-          return false;
-      }
-      return true;
+    throw SizeErr(m_size, rhs.m_size, "bool Vector<T>::operator<");
+  for(long i=0;i<m_size;i++)
+    if(m_data[i] >= rhs[i])
+      return false;
+
+  return true;
 }

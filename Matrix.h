@@ -165,4 +165,29 @@ class Matrix
       }
       return is;
     }
+
+    // Desc: formats and outputs the calling Matrix to the passed ostream
+    // Pre: None
+    // Post: The passed in parameter m will be formatted and output to
+    // the ostream. Any elements in m less than m's zero tolerance
+    // will output the value of 0 instead
+    friend ofstream& operator<<(ofstream& os, const Matrix<T>& m)
+    {
+      // for each element in v
+      for (long i = 0; i < m.GetSize(); i++)
+      {
+        for (long j = 0; j < m.GetSize(); j++)
+        {
+          // if the absolute value of the element is
+          // less than the tolerance, output 0 instead
+          // of the actual value
+          if (fabs(m(i, j)) < m.GetTolerance())
+            os << "0";
+          else
+            os << setprecision(10) << m(i, j) << " ";
+        }
+        os << endl;
+      }
+      return os;
+    }
 };

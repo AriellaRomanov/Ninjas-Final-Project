@@ -65,32 +65,41 @@ T PDEMatrix<T>::operator()(const long row, const long col) const
   if (col < 0 || col >= m_size)
     throw SubscriptErr(col, "col Matrix<T>& PDEMatrix<T>::operator()");
 
-  //calculate diagonal
-  if (row == col)
-    return 1;
-
-  //calculate lower off diagonal
-  if (row == col + 1)
+  if (row > col)
   {
-    if (row % (m_N - 1) == 0)
-      return 0;
-    else
+    //calculate lower off diagonal
+    if (row == col + 1)
+    {
+      if (row % (m_N - 1) == 0)
+        return 0;
+      else
+        return -0.25;
+    }
+
+    //further diagonals
+    if (row == col + m_N - 1)
       return -0.25;
   }
-
-  //calculate upper off diagonal
-  if (col == row + 1)
+  else
   {
-    if (col % (m_N - 1) == 0)
-      return 0;
-    else
+    //calculate upper off diagonal
+    if (col == row + 1)
+    {
+      if (col % (m_N - 1) == 0)
+        return 0;
+      else
+        return -0.25;
+    }
+
+    //further diagonals
+    if (col == row + m_N - 1)
       return -0.25;
+
+    //calculate diagonal
+    if (row == col)
+      return 1;
   }
 
-  //further diagonals
-  if (row == col + m_N - 1 || col == row + m_N - 1)
-    return -0.25;
-  
   //everything else
   return 0;
 }
@@ -196,27 +205,4 @@ PDEMatrix<T>& PDEMatrix<T>::operator=(const PDEMatrix<T>& rhs)
   m_size = rhs.GetSize();
   m_zero = rhs.GetTolerance();
   return *this;
-}
-
-template <typename T>
-Vector<T> PDEMatrix<T>::Jacob_Mult(Vector<T>& rhs)
-{
-  Vector<T> vect = Vector<T>(m_size);
-  for (long i = 0; i < m_size; i++)
-  {
-    T sum = 0;
-    //sum += ((*this)(i, i) * rhs[i]);
-    //Jacobi Mult Only uses the remainder matrix
-    //(i,i) is effectively 0 for this multiplication
-    if(i+1 < m_size)
-      sum += ((*this)(i, i+1) * rhs[i+1]);
-    if(i-1>=0)
-      sum += ((*this)(i, i-1) * rhs[i-1]);
-    if(i-(m_N-1)>=0)
-      sum += ((*this)(i, i-(m_N-1)) * rhs[i-(m_N-1)]);
-    if(i+(m_N-1)<m_size)
-      sum += ((*this)(i, i+(m_N-1)) * rhs[i+(m_N-1)]);
-    vect[i] = sum;
-  }
-  return vect;
 }

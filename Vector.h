@@ -110,6 +110,8 @@ class Vector
     // operator to subtract Vector with a Vector
     Vector<T>& operator-=(const Vector<T>& v);
 
+    bool operator<(const Vector<T>& rhs) const;
+
     // Desc: formats and outputs the calling Vector to the passed ostream
     // Pre: None
     // Post: The passed in parameter v will be formatted and output to
@@ -147,8 +149,28 @@ class Vector
         is >> v[i];
       return is;
     }
+
+    // Desc: formats and outputs the calling Vector to the passed ostream
+    // Pre: None
+    // Post: The passed in parameter v will be formatted and output to
+    // the ostream. Any elements in v less than v's zero tolerance
+    // will output the value of 0 instead
+    friend ofstream& operator<<(ofstream& os, const Vector& v)
+    {
+      // for each element in v
+      for (long i = 0; i < v.m_size; i++)
+      {
+        // if the absolute value of the element is
+        // less than the tolerance, output 0 instead
+        // of the actual value
+        if (fabs(v[i]) < v.zero_tol)
+          os << "0";
+        else
+          os << setprecision(10) << v[i] << " ";
+      }
+      return os;
+    }
     
-    bool operator<(const Vector<T>& rhs);
     
     /* friend bool operator<(Vector& lhs, Vector& rhs)
     {

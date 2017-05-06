@@ -132,8 +132,6 @@ class DenseMatrix : virtual public Matrix<T>
     // Pre: The rhs parameter must be of same size as object
     // Post: The matrix will take on the values of the rhs parameter
     virtual DenseMatrix<T>& operator=(const DenseMatrix<T>& rhs);
-	
-    Vector<T> Gaussian(long m_n, Vector<T>& b_vector);
 
   private:
     // the dimension of the matrix

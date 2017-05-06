@@ -9,69 +9,76 @@ PDESolution<T>::PDESolution(T x0(T), T x1(T), T y0(T), T y1(T), T g(T))
 }
 
 template <typename T>
-Vector<T> PDESolution<T>::Gaussian(long m_n)
+Vector<T> PDESolution<T>::Gaussian(const long N, const T tolerance) const
 {
-  long m_size = m_n-1;
-  Vector<T> b_vector((m_n-1)*(m_n-1));
-  for(int i=0;i<(m_n-1)*(m_n-1);i++)
+  long size = N - 1;
+  Vector<T> b_vector(size * size);
+  b_vector.SetTolerance(tolerance);
+  for(int i = 0; i < size * size; i++)
     b_vector[i] = 0;
-  for(int i=0;i<m_n-1;i++)
-    b_vector[i] += m_x0(static_cast<T>(i+1)/(m_n))/4;
-  for(int i=0;i<m_n-1;i++)
-    b_vector[i*(m_n-1)] += m_y0(static_cast<T>(i+1)/(m_n))/4;
-  for(int i=0;i<m_n-1;i++)
-    b_vector[(((m_n-1)*(m_n-1))-(m_n-1))+i] += m_x1(static_cast<T>(i+1)/(m_n))/4;
-  for(int i=0;i<m_n-1;i++)
-    b_vector[((i+1)*(m_n-1))-1] += m_y1(static_cast<T>(i+1)/(m_n))/4;
-  for(int i=0;i<m_size;i++)
+
+  for(int i = 0; i < size; i++)
   {
-    for(int k=0;k<m_size;k++)
-      b_vector[(i*m_size)+k] -= m_g(static_cast<T>(i+1)/m_n)*(1/static_cast<T>(m_n*m_n*4));
+    b_vector[i] += m_x0(static_cast<T>(i + 1) / N) / 4;
+    b_vector[i * size] += m_y0(static_cast<T>(i + 1) / N) / 4;
+    b_vector[((size * size - size) + i)] += m_x1(static_cast<T>(i + 1) / N) / 4;
+    b_vector[((i + 1) * size) - 1] += m_y1(static_cast<T>(i + 1) / N) / 4;
+    for(int k = 0; k < size; k++)
+      b_vector[(i * size) + k] -= m_g(static_cast<T>(i + 1) / N) * (1 / static_cast<T>(N * N * 4));
   }
-  
-  DenseMatrix<T> A(m_size*m_size);
-  return A.Gaussian(m_n,b_vector);
+
+  class Gaussian gauss;
+  DenseMatrix<T> A(size * size);
+  A.SetTolerance(tolerance);
+
+  for(long row = 0; row < size * size; row++)
+  {
+    for(long col = 0; col < size * size; col++)
+    {
+      A(row, col, 0);
+      //calculate diagonal
+      if (row == col)
+        A(row, col, 1);
+
+      //calculate lower off diagonal
+      else if (row == col + 1 && row % size != 0)
+        A(row, col, -0.25);
+
+      //calculate upper off diagonal
+      else if (col == row + 1 && col % size != 0)
+        A(row, col, -0.25);
+
+      //further diagonals
+      else if (row == col + size || col == row + size)
+        A(row, col, -0.25);   
+    }
+  }
+
+  return gauss(A, b_vector);
 }
 
 template <typename T>
-Vector<T> PDESolution<T>::Jacobi(long iter_max, long m_n)
+Vector<T> PDESolution<T>::Jacobi(const long N, const T tolerance) const
 {
-  long m_size = m_n-1;
-  Vector<T> b_vector((m_n-1)*(m_n-1));
-  for(int i=0;i<(m_n-1)*(m_n-1);i++)
+  long size = N - 1;
+  Vector<T> b_vector(size * size);
+  for(int i = 0; i < (size * size); i++)
     b_vector[i] = 0;
-  for(int i=0;i<m_n-1;i++)
-    b_vector[i] += m_x0(static_cast<T>(i+1)/(m_n))/4;
-  for(int i=0;i<m_n-1;i++)
-    b_vector[i*(m_n-1)] += m_y0(static_cast<T>(i+1)/(m_n))/4;
-  for(int i=0;i<m_n-1;i++)
-    b_vector[(((m_n-1)*(m_n-1))-(m_n-1))+i] += m_x1(static_cast<T>(i+1)/(m_n))/4;
-  for(int i=0;i<m_n-1;i++)
-    b_vector[((i+1)*(m_n-1))-1] += m_y1(static_cast<T>(i+1)/(m_n))/4;
-  for(int i=0;i<m_size;i++)
+  for(int i = 0; i < size; i++)
   {
-    for(int k=0;k<m_size;k++)
-      b_vector[(i*m_size)+k] -= m_g(static_cast<T>(i+1)/m_n)*(1/static_cast<T>(m_n*m_n*4));
-  }
-  
-  Vector<T> ErrT(m_size*m_size);
-  for(int i=0;i<m_size*m_size;i++)
-    ErrT[i] = .0000001;
-	Vector<T> x_prev(m_size*m_size);
-  PDEMatrix<T> a_matrix(m_n);
-  
-  for(int i=0;i<iter_max;i++)
-	{
-	  Vector<T> temp(m_size*m_size);
-	  temp = b_vector - a_matrix.Jacob_Mult(x_prev);
-    x_prev = temp;
+    b_vector[i] += m_x0(static_cast<T>(i + 1) / N) / 4;
+    b_vector[i * size] += m_y0(static_cast<T>(i + 1) / N) / 4;
+    b_vector[(size * size) - size + i] += m_x1(static_cast<T>(i + 1) / N) / 4;
+    b_vector[((i + 1) * size) - 1] += m_y1(static_cast<T>(i + 1) / N) / 4;
     
-	  if(((a_matrix*temp) - b_vector) < ErrT)
-	  {
-	    cout<<"Solution after "<<i<<" iterations."<<endl;
-      i=iter_max;
-	  }
-	}
+    for(int k = 0; k < size; k++)
+      b_vector[(i * size) + k] -= m_g(static_cast<T>(i + 1) / N) * (1 / static_cast<T>(N * N * 4));
+  }
+
+  PDEMatrix<T> a_matrix(N);
+  a_matrix.SetTolerance(tolerance);
+  b_vector.SetTolerance(tolerance);
   
-  return x_prev;
+  class Jacobi jacob;
+  return jacob(a_matrix, b_vector);
 }
