@@ -19,7 +19,7 @@ class PDESolution
     T (*m_g)(T);
   public:
     PDESolution(T x0(T), T x1(T), T y0(T), T y1(T), T g(T));
-    Vector<T> Guassian(long m_n);
+    Vector<T> Gaussian(long m_n);
     Vector<T> Jacobi(long iter_max, long m_n);
 };
 

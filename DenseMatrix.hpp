@@ -241,3 +241,78 @@ DenseMatrix<T>& DenseMatrix<T>::operator=(const DenseMatrix<T>& rhs)
       (*this)(i, j, rhs(i, j));
   return *this;
 }
+
+template <typename T>
+Vector<T> DenseMatrix<T>::Gaussian(long m_n, Vector<T>& b_vector)
+{
+  if(m_size != (m_n-1)*(m_n-1))
+    throw SizeErr(m_size,(m_n-1)*(m_n-1),"Gaussian Matrix/Passed Size");
+  if(m_size != b_vector.GetSize())
+    throw SizeErr(m_size,b_vector.GetSize(),"Gaussian Matrix/Vector");
+  for(long row=0;row<(m_n-1)*(m_n-1);row++)
+  {
+    for(long col=0;col<(m_n-1)*(m_n-1);col++)
+    {
+      m_data[row][col] =  0;
+      //calculate diagonal
+      if (row == col)
+        m_data[row][col] = 1;
+
+      //calculate lower off diagonal
+      if (row == col + 1)
+      {
+      if (row % (m_n - 1) == 0)
+        m_data[row][col] =  0;
+      else
+        m_data[row][col] =  -0.25;
+      }
+
+      //calculate upper off diagonal
+      if (col == row + 1)
+      {
+        if (col % (m_n - 1) == 0)
+          m_data[row][col] =  0;
+        else
+          m_data[row][col] =  -0.25;
+      }
+
+      //further diagonals
+      if (row == col + m_n - 1 || col == row + m_n - 1)
+        m_data[row][col] =  -0.25;      
+    }
+  }
+  
+  
+  
+  for(long i=0;i<(m_n-1)*(m_n-1);i++)
+  {
+    for(long j=i+1;j<(m_n-1)*(m_n-1);j++)
+    {
+      if(m_data[i][j] != 0)
+      {
+        T temp = m_data[i][j]/m_data[i][i];
+        for(long k=i;k<(m_n-1)*(m_n-1);k++)
+          m_data[k][j] -= temp*m_data[k][i];
+        b_vector[j] -= temp*b_vector[i];
+      }
+    }
+  }
+  //Bottom half is 0's
+  for(long i=((m_n-1)*(m_n-1))-1;i>=0;i--)
+  {
+    for(long k=0;k<i;k++)
+    {
+      b_vector[k] -= (m_data[i][k]/m_data[i][i])*b_vector[i];
+      m_data[i][k] = 0;
+    }
+  }
+  //Top half is 0's
+  for(long i=0;i<(m_n-1)*(m_n-1);i++)
+  {
+    if(m_data[i][i] == 0)
+      throw  DivByZeroErr("Gaussian");
+    b_vector[i] = b_vector[i]/m_data[i][i];
+  }
+  //Diagonal is 1's
+  return b_vector;
+}

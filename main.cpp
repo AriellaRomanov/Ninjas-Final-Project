@@ -9,22 +9,29 @@ T evaluate(T operand)
   return T_funct(operand);
 }
  */
-Type x0(Type a){return a*a*a;}
-Type x1(Type a){return a*a*a;}
-Type y0(Type a){return 0.0;}
-Type y1(Type a){return 1.0;}
-Type g(Type y){return y;}
+Type f_x0(Type a){return a*a*a;}
+Type f_x1(Type a){return a*a*a;}
+Type f_y0(Type a __attribute__((unused))){return 0.0;}
+Type f_y1(Type a __attribute__((unused))){return 1.0;}
+Type f_g(Type y){return y;}
 
 
 int main()
 {
   try
   {
+    long size = 10;
+    long iteration_max = 1000000;
     
-    PDESolution<Type> X(x0, x1, y0, y1, g);
+    PDESolution<Type> X(f_x0, f_x1, f_y0, f_y1, f_g);
     int timeStart = time(NULL);
-    cout << X.Jacobi(1000,4) << endl;
+    cout << X.Jacobi(iteration_max, size) << endl;
     cout<<time(NULL)-timeStart<<endl;
+    
+    timeStart = time(NULL);
+    cout << X.Gaussian(size) << endl;
+    cout<<time(NULL)-timeStart<<endl;
+    
     /* const long SIZE = 4;
     Vector<Type> b_vector((SIZE-1)*(SIZE-1));
     for(int i=0;i<(SIZE-1)*(SIZE-1);i++)
