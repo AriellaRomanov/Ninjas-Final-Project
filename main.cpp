@@ -1,3 +1,4 @@
+#include <chrono>
 #include "DenseMatrix.h"
 #include "PDEMatrix.h"
 #include "PDE.h"
@@ -34,14 +35,14 @@ int main(int argc, char * argv[])
       throw TolErr("program input");
   
     PDESolution<Type> X(f_x0, f_x1, f_y0, f_y1, f_g);
-    long timeStart = time(NULL);
+    auto timeStart = chrono::high_resolution_clock::now();
     Vector<Type> jvect(X.Jacobi(N, tol));
-    long jDiff = time(NULL) - timeStart;
+    auto jDiff = chrono::duration_cast<chrono::milliseconds>(chrono::high_resolution_clock::now() - timeStart).count();
 
-    timeStart = time(NULL);
+    timeStart = chrono::high_resolution_clock::now();
     Vector<Type> gvect(X.Gaussian(N, tol));
-    long gDiff = time(NULL) - timeStart;
-    
+    auto gDiff = chrono::duration_cast<chrono::milliseconds>(chrono::high_resolution_clock::now() - timeStart).count();
+
     if (argc >= 4)
     {
       Vector<Type> x(jvect.GetSize());
@@ -58,40 +59,12 @@ int main(int argc, char * argv[])
       file.open(argv[3]);
       if (file.is_open())
       {
-        //file << "Jacobi (" << jDiff << " seconds):" << endl;
-        
         file << x << endl;
         file << y << endl;
         file << jvect << endl << endl;
-
-        //for (long i = 0; i < (N - 1) * (N - 1); i++)
-          //file << x[i] << " " << y[i] << " " << jvect[i] << endl;
-
-        // file << "ListPointPlot3D[{";
-        // for (long i = 0; i < (N - 1) * (N - 1); i++)
-        // {
-        //   file << "{" << x[i] << "," << y[i] << "," << jvect[i] << "}";
-        //   if (i < (N - 1) * (N - 1) - 1)
-        //     file << ",";
-        // }
-        // file << "}]" << endl;
-
-        //file << "Gaussian (" << gDiff << " seconds):" << endl;
-
         file << gvect << endl;
-
-        //for (long i = 0; i < (N - 1) * (N - 1); i++)
-          //file << x[i] << " " << y[i] << " " << gvect[i] << endl;
-
-        // file << "ListPointPlot3D[{";
-        // for (long i = 0; i < (N - 1) * (N - 1); i++)
-        // {
-        //   file << "{" << x[i] << "," << y[i] << "," << gvect[i] << "}";
-        //   if (i < (N - 1) * (N - 1) - 1)
-        //     file << ",";
-        // }
-        // file << "}]" << endl;
-        
+        file << "Jacobi (" << jDiff << " milliseconds):" << endl;
+        file << "Gaussian (" << gDiff << " milliseconds):" << endl;
         file.close();
       }
       else
@@ -99,10 +72,10 @@ int main(int argc, char * argv[])
     }
     else
     {
-      cout << "Jacobi (" << jDiff << " seconds):" << endl;
-      cout << jvect << endl;
-      cout << "Gaussian (" << gDiff << " seconds):" << endl;
+      cout << jvect << endl << endl;
       cout << gvect << endl;
+      cout << "Jacobi (" << jDiff << " milliseconds)" << endl;
+      cout << "Gaussian (" << gDiff << " milliseconds)" << endl;
     }
   
   }
