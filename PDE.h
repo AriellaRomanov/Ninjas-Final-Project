@@ -21,9 +21,6 @@ class PDESolution
     PDESolution(T x0(T), T x1(T), T y0(T), T y1(T), T g(T));
     Vector<T> Guassian(long m_n);
     Vector<T> Jacobi(long iter_max, long m_n);
-    
-    /* template <T,T T_funct(T)>
-    T evaluate(T operand); */
 };
 
 #include "PDE.hpp"

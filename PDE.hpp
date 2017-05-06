@@ -36,37 +36,46 @@ Vector<T> PDESolution<T>::Guassian()
 template <typename T>
 Vector<T> PDESolution<T>::Jacobi(long iter_max, long m_n)
 {
-  cout<<"Jacobi Entered"<<endl;
+  for(int i=0;i<m_n-1;i++)
+    cout<<m_y0(static_cast<T>(i+1)/(m_n))/4<<endl;
+  for(int i=0;i<m_n-1;i++)
+    cout<<m_x1(static_cast<T>(i+1)/(m_n))/4<<endl;
+  for(int i=0;i<m_n-1;i++)
+    cout<<m_y1(static_cast<T>(i+1)/(m_n))/4<<endl;
+  
   long m_size = m_n-1;
   Vector<T> b_vector((m_n-1)*(m_n-1));
   for(int i=0;i<(m_n-1)*(m_n-1);i++)
     b_vector[i] = 0;
+  cout<<b_vector<<endl;
   for(int i=0;i<m_n-1;i++)
-    b_vector[i] += m_x0(static_cast<T>((i+1))/(m_n))/4;
-    //b_vector[i] += (evaluate<T,m_x0>(static_cast<T>((i+1))/(m_n)))/4;
+    b_vector[i] += m_x0(static_cast<T>(i+1)/(m_n))/4;
+  cout<<b_vector<<endl;
   for(int i=0;i<m_n-1;i++)
-    b_vector[i*(m_n-1)] += m_y0(static_cast<T>((i+1))/(m_n))/4;
-    //b_vector[i*(m_n-1)] += (evaluate<T,m_y0>(static_cast<T>((i+1))/(m_n)))/4;
+    b_vector[i*(m_n-1)] += m_y0(static_cast<T>(i+1)/(m_n))/4;
+  cout<<b_vector<<endl;
   for(int i=0;i<m_n-1;i++)
-    b_vector[(((m_n-1)*(m_n-1))-(m_n-1))+i] += m_x1(static_cast<T>((i+1))/(m_n))/4;
-    //b_vector[(((m_n-1)*(m_n-1))-(m_n-1))+i] += (evaluate<T,m_x1>(static_cast<T>((i+1))/(m_n)))/4;
+    b_vector[(((m_n-1)*(m_n-1))-(m_n-1))+i] += m_x1(static_cast<T>(i+1)/(m_n))/4;
+  cout<<b_vector<<endl;
   for(int i=0;i<m_n-1;i++)
-    b_vector[((i+1)*(m_n-1))-1] += y1(static_cast<T>((i+1))/(m_n))/4;
-    //b_vector[((i+1)*(m_n-1))-1] += (evaluate<T,m_y1>(static_cast<T>((i+1))/(m_n)))/4;
+    b_vector[((i+1)*(m_n-1))-1] += m_y1(static_cast<T>(i+1)/(m_n))/4;
+  cout<<b_vector<<endl;
+  for(int i=0;i<m_size;i++)
+  {
+    for(int k=0;k<m_size;k++)
+      b_vector[(i*m_size)+k] -= m_g(static_cast<T>(i+1)/m_n)*(1/static_cast<T>(m_n*m_n*4));
+  }
   
-  cout<<"Vector Finished"<<endl;
+  cout<<b_vector<<endl;
   
   Vector<T> ErrT(m_size*m_size);
   for(int i=0;i<m_size*m_size;i++)
-    ErrT[i] = .0000001;
+    ErrT[i] = .01;
 	Vector<T> x_prev(m_size*m_size);
   PDEMatrix<T> a_matrix(m_n);
   
-  cout<<"Loop Start"<<endl;
-  
   for(int i=0;i<iter_max;i++)
 	{
-    cout<<"Loop Start"<<endl;
 	  Vector<T> temp(m_size*m_size);
 	  temp = b_vector - a_matrix.Jacob_Mult(x_prev);
     x_prev = temp;
@@ -80,10 +89,3 @@ Vector<T> PDESolution<T>::Jacobi(long iter_max, long m_n)
   
   return x_prev;
 }
-
-//Not sure about this templating
-/* template <typename T, T T_funct(T)>
-T PDESolution<T>::evaluate(T operand) 
-{
-  return T_funct(operand);
-} */

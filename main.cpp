@@ -11,8 +11,8 @@ T evaluate(T operand)
  */
 Type x0(Type a){return a*a*a;}
 Type x1(Type a){return a*a*a;}
-Type y0(){return 0.0;}
-Type y1(){return 1.0;}
+Type y0(Type a){return 0.0;}
+Type y1(Type a){return 1.0;}
 Type g(Type y){return y;}
 
 
@@ -22,7 +22,9 @@ int main()
   {
     
     PDESolution<Type> X(x0, x1, y0, y1, g);
-    X.Jacobi(1000,4);
+    int timeStart = time(NULL);
+    cout << X.Jacobi(1000,4) << endl;
+    cout<<time(NULL)-timeStart<<endl;
     /* const long SIZE = 4;
     Vector<Type> b_vector((SIZE-1)*(SIZE-1));
     for(int i=0;i<(SIZE-1)*(SIZE-1);i++)

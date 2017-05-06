@@ -213,13 +213,9 @@ Vector<T> PDEMatrix<T>::Jacob_Mult(Vector<T>& rhs)
     if(i-1>=0)
       sum += ((*this)(i, i-1) * rhs[i-1]);
     if(i-(m_N-1)>=0)
-      sum += ((*this)(i, i-(m_N-1) * rhs[i-(m_N-1)]));
+      sum += ((*this)(i, i-(m_N-1)) * rhs[i-(m_N-1)]);
     if(i+(m_N-1)<m_size)
-    {
-      cout << "value " << i+(m_N-1) << "| size " << m_size << "| i "<< i << " | ";
-      sum += ((*this)(i, i+(m_N-1) * rhs[i+(m_N-1)]));
-      cout << "No Error" <<endl;
-    }
+      sum += ((*this)(i, i+(m_N-1)) * rhs[i+(m_N-1)]);
     vect[i] = sum;
   }
   return vect;
