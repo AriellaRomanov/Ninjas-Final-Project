@@ -147,6 +147,20 @@ class Vector
         is >> v[i];
       return is;
     }
+    
+    bool operator<(const Vector<T>& rhs);
+    
+    /* friend bool operator<(Vector& lhs, Vector& rhs)
+    {
+      if(lhs.m_size != rhs.m_size)
+        throw SizeErr(lhs.m_size, rhs.m_size);
+      for(long i=0;i<lhs.m_size;i++)
+      {
+        if(lhs[i] >= rhs[i])
+          return false;
+      }
+      return true;
+    } */
 
   private:
     // the dimension of the Vector

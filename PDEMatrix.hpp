@@ -61,9 +61,9 @@ template <typename T>
 T PDEMatrix<T>::operator()(const long row, const long col) const
 {
   if (row < 0 || row >= m_size)
-    throw SubscriptErr(row, "Matrix<T>& PDEMatrix<T>::operator()");
+    throw SubscriptErr(row, "row Matrix<T>& PDEMatrix<T>::operator()");
   if (col < 0 || col >= m_size)
-    throw SubscriptErr(col, "Matrix<T>& PDEMatrix<T>::operator()");
+    throw SubscriptErr(col, "col Matrix<T>& PDEMatrix<T>::operator()");
 
   //calculate diagonal
   if (row == col)
@@ -198,7 +198,8 @@ PDEMatrix<T>& PDEMatrix<T>::operator=(const PDEMatrix<T>& rhs)
   return *this;
 }
 
-Vector<T> PDEMatrix<T>::Jacob_Mult(Vector<T>& x) const
+template <typename T>
+Vector<T> PDEMatrix<T>::Jacob_Mult(Vector<T>& rhs)
 {
   Vector<T> vect = Vector<T>(m_size);
   for (long i = 0; i < m_size; i++)
@@ -211,10 +212,14 @@ Vector<T> PDEMatrix<T>::Jacob_Mult(Vector<T>& x) const
       sum += ((*this)(i, i+1) * rhs[i+1]);
     if(i-1>=0)
       sum += ((*this)(i, i-1) * rhs[i-1]);
-    if(i-(m_n-1)>=0)
-      sum += ((*this)(i, i-(m_n-1) * rhs[i-(m_n-1)]);
-    if(i+(m_n-1)<m_size)
-      sum += ((*this)(i, i+(m_n-1) * rhs[i+(m_n-1)]);
+    if(i-(m_N-1)>=0)
+      sum += ((*this)(i, i-(m_N-1) * rhs[i-(m_N-1)]));
+    if(i+(m_N-1)<m_size)
+    {
+      cout << "value " << i+(m_N-1) << "| size " << m_size << "| i "<< i << " | ";
+      sum += ((*this)(i, i+(m_N-1) * rhs[i+(m_N-1)]));
+      cout << "No Error" <<endl;
+    }
     vect[i] = sum;
   }
   return vect;

@@ -132,6 +132,10 @@ class DenseMatrix : virtual public Matrix<T>
     // Pre: The rhs parameter must be of same size as object
     // Post: The matrix will take on the values of the rhs parameter
     virtual DenseMatrix<T>& operator=(const DenseMatrix<T>& rhs);
+	
+    //###################Function for doing gaussian elimination
+    //Vector<T> Gaussian(
+  
 
   private:
     // the dimension of the matrix

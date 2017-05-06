@@ -252,3 +252,16 @@ Vector<T>& Vector<T>::operator-=(const Vector<T>& v)
     m_data[i] -= v.m_data[i];
   return *this;
 }
+
+template <typename T>
+bool Vector<T>::operator<(const Vector<T>& rhs)
+{
+  if(m_size != rhs.m_size)
+        throw SizeErr(m_size, rhs.m_size);
+      for(long i=0;i<m_size;i++)
+      {
+        if(m_data[i] >= rhs[i])
+          return false;
+      }
+      return true;
+}

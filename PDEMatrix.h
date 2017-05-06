@@ -137,7 +137,7 @@ class PDEMatrix : virtual public Matrix<T>
     // Post: The matrix will take on the values of the rhs parameter
     virtual PDEMatrix<T>& operator=(const PDEMatrix<T>& rhs);
     
-    Vector<T> Jacob_Mult(Vector<T>& x);
+    Vector<T> Jacob_Mult(Vector<T>& rhs);
 
   private:
     // the granularity of the mesh
