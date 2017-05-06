@@ -63,8 +63,8 @@ int main(int argc, char * argv[])
         file << y << endl;
         file << jvect << endl << endl;
         file << gvect << endl;
-        file << "Jacobi (" << jDiff << " milliseconds):" << endl;
-        file << "Gaussian (" << gDiff << " milliseconds):" << endl;
+        file << "Jacobi (" << jDiff << " milliseconds)" << endl;
+        file << "Gaussian (" << gDiff << " milliseconds)" << endl;
         file.close();
       }
       else
@@ -74,9 +74,9 @@ int main(int argc, char * argv[])
     {
       cout << jvect << endl << endl;
       cout << gvect << endl;
-      cout << "Jacobi (" << jDiff << " milliseconds)" << endl;
-      cout << "Gaussian (" << gDiff << " milliseconds)" << endl;
     }
+    cout << "Jacobi (" << jDiff << " milliseconds)" << endl;
+    cout << "Gaussian (" << gDiff << " milliseconds)" << endl;
   
   }
   catch (Error& err)
