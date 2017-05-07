@@ -12,6 +12,9 @@ Vector<T> Jacobi::operator()(Matrix<T>& matrix, const Vector<T>& b_vect)
 {
   if (!matrix.IsDiagDom())
     throw DiagDomErr();
+  if (matrix.GetSize() != b_vect.GetSize())
+    throw SizeErr(matrix.GetSize(), b_vect.GetSize(), "Vector<T> Jacobi::operator()");
+    
   VNorm1 norm;
   Vector<T> x_vect0 = b_vect;
   Vector<T> x_vect1 = b_vect;

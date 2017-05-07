@@ -79,7 +79,7 @@ class Vector
     // Desc: returns a new Vector with the value of
     // the calling Vector divided by a value d
     // Pre: the parameter d must be a type that
-    // can be divided with type T
+    // can be divided with type T and cannot be zero
     // Post: a new Vector will be returned that has
     // the value of the calling Vector divided by d
     template <typename Y>
@@ -103,20 +103,43 @@ class Vector
     // Post: the calling Vector will be modified to match
     // the parameter Vector v
     Vector<T>& operator=(const Vector<T>& v);
-    // operator to divide Vector by a number
+    // Desc: operator to divide Vector by a number
+    // Pre: The parameter cannot be equal to zero and
+    // must be able to cast to T
+    // Post: The calling object will be divided by the
+    // the passed value and take the new value
     template <typename Y>
     Vector<T>& operator/=(const Y& d);
-    // operator to add Vector with a number
+    // Desc: operator to add Vector with a number
+    // Pre: None
+    // Post: Each value in the vector will be added
+    // with the parameter
     template <typename Y>
     Vector<T>& operator+=(const Y& d);
-    // operator to subtract Vector with a number
+    // Desc: operator to subtract Vector with a number
+    // Pre: None
+    // Post: Each of the vector values will have the
+    // parameter subtracted from it
     template <typename Y>
     Vector<T>& operator-=(const Y& d);
-    // operator to add Vector with a Vector
+    // Desc: operator to add Vector with a Vector
+    // Pre: The vectors must be the same size
+    // Post: Each corresponding value of the vectors
+    // will be added together
     Vector<T>& operator+=(const Vector<T>& v);
-    // operator to subtract Vector with a Vector
+    // Desc: operator to subtract Vector with a Vector
+    // Pre: vectors must be the same size
+    // Post: the vector will have each corresponding element
+    // from the parameter subtracted from it
     Vector<T>& operator-=(const Vector<T>& v);
 
+    // Desc: Returns true or false for if each value in the 
+    // calling object is less than the rhs value
+    // Pre: the rhs vector must be the same value as the 
+    // calling vector
+    // Post: false will be returned if any of the rhs
+    // values are less than or equal to the corresponding
+    // calling object value
     bool operator<(const Vector<T>& rhs) const;
 
     // Desc: formats and outputs the calling Vector to the passed ostream
@@ -177,19 +200,6 @@ class Vector
       }
       return os;
     }
-    
-    
-    /* friend bool operator<(Vector& lhs, Vector& rhs)
-    {
-      if(lhs.m_size != rhs.m_size)
-        throw SizeErr(lhs.m_size, rhs.m_size);
-      for(long i=0;i<lhs.m_size;i++)
-      {
-        if(lhs[i] >= rhs[i])
-          return false;
-      }
-      return true;
-    } */
 
   private:
     // the dimension of the Vector

@@ -18,8 +18,8 @@ class Gaussian
     // Post: instantiates an instance of the Gaussian class
     Gaussian();
     // Desc: applies the Gaussian process to a Matrix of type T
-    // Pre: 
-    // Post: 
+    // Pre: matrix and b_vect must be of the same size
+    // Post: A vector solution to the Ax = b problem will be returned
     template <typename T>
     Vector<T> operator()(Matrix<T>& matrix, const Vector<T>& b_vect);
 };
