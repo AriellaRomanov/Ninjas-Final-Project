@@ -1,3 +1,10 @@
+/******************************************
+** Programmers: Andrea Smith, Brian Yadamec
+** Class: Object-Oriented Numerical Modeling
+** Project: Dirichlet Problem
+** Date: May 7th, 2017
+******************************************/
+
 template <typename T>
 PDEMatrix<T>::PDEMatrix(const long n)
 : m_N(n), m_size(pow(n - 1, 2)), m_zero(0)

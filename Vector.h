@@ -1,3 +1,10 @@
+/******************************************
+** Programmers: Andrea Smith, Brian Yadamec
+** Class: Object-Oriented Numerical Modeling
+** Project: Dirichlet Problem
+** Date: May 7th, 2017
+******************************************/
+
 #pragma once
 
 #include <fstream>

@@ -1,10 +1,11 @@
+/******************************************
+** Programmers: Andrea Smith, Brian Yadamec
+** Class: Object-Oriented Numerical Modeling
+** Project: Dirichlet Problem
+** Date: May 7th, 2017
+******************************************/
+
 #pragma once
-/* #include "PDEMatrix.h"
-#include "DenseMatrix.h" */
-
-/* template <typename T, T x0(T), T x1(T), T y0(T), T y1(T), T g(T)>
-Vector<T> PDESolution(long method); */
-
 
 #include "Jacobi.h"
 #include "Gaussian.h"

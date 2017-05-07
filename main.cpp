@@ -1,15 +1,16 @@
+/******************************************
+** Programmers: Andrea Smith, Brian Yadamec
+** Class: Object-Oriented Numerical Modeling
+** Project: Dirichlet Problem
+** Date: May 7th, 2017
+******************************************/
+
 #include <chrono>
 #include "DenseMatrix.h"
 #include "PDEMatrix.h"
 #include "PDE.h"
 using Type = double;
 
-/* template <typename T, T T_funct(T)>
-T evaluate(T operand) 
-{
-  return T_funct(operand);
-}
- */
 Type f_x0(Type a){return a*a*a;}
 Type f_x1(Type a){return a*a*a;}
 Type f_y0(Type a __attribute__((unused))){return 0.0;}

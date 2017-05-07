@@ -1,3 +1,10 @@
+/******************************************
+** Programmers: Andrea Smith, Brian Yadamec
+** Class: Object-Oriented Numerical Modeling
+** Project: Dirichlet Problem
+** Date: May 7th, 2017
+******************************************/
+
 template <typename T>
 PDESolution<T>::PDESolution(T x0(T), T x1(T), T y0(T), T y1(T), T g(T))
 {
