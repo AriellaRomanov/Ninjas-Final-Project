@@ -5,7 +5,7 @@
 ** Date: May 7th, 2017
 ******************************************/
 
-Jacobi::Jacobi(){}
+Jacobi::Jacobi() { }
 
 template <typename T>
 Vector<T> Jacobi::operator()(Matrix<T>& matrix, const Vector<T>& b_vect)
@@ -17,7 +17,7 @@ Vector<T> Jacobi::operator()(Matrix<T>& matrix, const Vector<T>& b_vect)
     
   VNorm1 norm;
   Vector<T> x_vect0 = b_vect;
-  Vector<T> x_vect1 = b_vect;
+  Vector<T> x_vect1 = b_vect; 
   while (norm((matrix * x_vect0) - b_vect) > matrix.GetTolerance())
   {
     for (long i = 0; i < matrix.GetSize(); i++)
